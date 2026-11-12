@@ -1,0 +1,39 @@
+# ==============================================================================
+# Render Blueprint Specification — Rang & Riwaayat
+# ==============================================================================
+# Docs: https://render.com/docs/blueprint-spec
+# This blueprint provisions the Node.js production service with full persistent
+# Socket.IO WebSocket multiplayer engine, Next.js SSR, and health check monitoring.
+
+services:
+  - type: web
+    name: rang-and-riwaayat
+    runtime: node
+    plan: starter
+    region: singapore # Optimized for lowest latency across India & South Asia
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: USE_FILE_DATA_STORE_FALLBACK
+        value: "true"
+      - key: ADMIN_JWT_SECRET
+        generateValue: true
+      - key: ADMIN_SESSION_MAX_AGE_DAYS
+        value: "7"
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://rang-and-riwaayat.onrender.com
+      - key: NEXT_PUBLIC_ADS_ENABLED
+        value: "false"
+      - key: NEXT_PUBLIC_ADSENSE_CLIENT_ID
+        value: ""
+      - key: NEXT_PUBLIC_ADSENSE_PUB_ID
+        value: ""
+

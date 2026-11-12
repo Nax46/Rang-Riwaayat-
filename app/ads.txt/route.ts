@@ -1,0 +1,19 @@
+import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+  const pubId = process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || 'pub-0000000000000000';
+  const cleanPubId = pubId.replace(/^ca-/, '');
+  
+  const content = `# Google AdSense Publisher Verification File\n# Rang & Riwaayat — Official ads.txt\ngoogle.com, ${cleanPubId}, DIRECT, f08c47fec0942fa0\n`;
+
+  return new NextResponse(content, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+    },
+  });
+}
+

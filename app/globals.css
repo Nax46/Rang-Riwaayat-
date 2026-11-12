@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-vermilion: #8F3026;
+  --color-gold: #D6A84B;
+  --color-ivory: #F6EBDD;
+  --color-charcoal: #24201D;
+  --font-serif: 'Merriweather', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-devanagari: 'Noto Sans Devanagari', sans-serif;
+  --font-gujarati: 'Noto Sans Gujarati', sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: #FAF5ED;
+  color: #24201D;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Indic text typographic optimization */
+[lang="hi"] {
+  font-family: var(--font-devanagari), var(--font-sans);
+  line-height: 1.65;
+}
+
+[lang="gu"] {
+  font-family: var(--font-gujarati), var(--font-sans);
+  line-height: 1.65;
+}
+
+/* Editorial selection */
+::selection {
+  background-color: #8F3026;
+  color: #FAF5ED;
+}
+
+/* Touch targets and interactions */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure inputs on mobile have at least 16px font to prevent unwanted iOS auto-zoom */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F6EBDD;
+}
+::-webkit-scrollbar-thumb {
+  background: #D6A84B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B88B2F;
+}
+
+/* Utility to hide scrollbar while preserving smooth touch panning */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Subtle Indian Ornamental borders */
+.border-gold-ornate {
+  border: 1px solid #D6A84B;
+  box-shadow: inset 0 0 0 1px rgba(214, 168, 75, 0.2);
+}
+
+.bg-pattern-rangoli {
+  background-color: #FAF5ED;
+  background-image: radial-gradient(#D6A84B 0.75px, transparent 0.75px), radial-gradient(#8F3026 0.75px, #FAF5ED 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+/* Print Stylesheet for clean recipe, calendar, and muhurat printing */
+@media print {
+  header, footer, aside, nav, .no-print {
+    display: none !important;
+  }
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .border, .border-2 {
+    border-color: #CCCCCC !important;
+  }
+}
