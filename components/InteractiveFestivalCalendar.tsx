@@ -156,77 +156,99 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=India`;
   };
 
+  const calLabels = {
+    allYear: locale === 'hi' ? 'संपूर्ण वर्ष' : locale === 'gu' ? 'સમગ્ર વર્ષ' : 'All Year',
+    currentTag: locale === 'hi' ? 'वर्तमान' : locale === 'gu' ? 'વર્તમાન' : 'Current',
+    upcomingTag: locale === 'hi' ? 'आगामी' : locale === 'gu' ? 'આગામી' : 'Upcoming',
+    archiveTag: locale === 'hi' ? 'अभिलेख' : locale === 'gu' ? 'અભિલેખ' : 'Archive',
+    timeframeLabel: locale === 'hi' ? 'अवधि:' : locale === 'gu' ? 'સમયગાળો:' : 'Timeframe:',
+    allFestivals: locale === 'hi' ? `सभी ${currentSysYear} पर्व` : locale === 'gu' ? `બધા ${currentSysYear} તહેવારો` : `All ${currentSysYear}`,
+    todayFestivals: locale === 'hi' ? 'आज के पर्व' : locale === 'gu' ? 'આજના તહેવારો' : 'Today',
+    next7: locale === 'hi' ? 'आगामी 7 दिन' : locale === 'gu' ? 'આગામી 7 દિવસ' : 'Next 7 Days',
+    thisMonth: locale === 'hi' ? 'इस माह' : locale === 'gu' ? 'આ મહિને' : 'This Month',
+    communityLabel: locale === 'hi' ? 'समुदाय:' : locale === 'gu' ? 'પરંપરા:' : 'Community:',
+    todayBadge: locale === 'hi' ? 'आज का पर्व' : locale === 'gu' ? 'આજનો અવસર' : 'Today',
+    celebratingTodayBadge: locale === 'hi' ? 'आज का पावन पर्व' : locale === 'gu' ? 'આજનો પાવન અવસર' : 'Celebrating Today',
+  };
+
   return (
-    <div className="bg-ivory-surface rounded-3xl p-6 sm:p-10 border border-gold/40 shadow-editorial space-y-8">
+    <div className="bg-ivory-surface rounded-3xl p-4 sm:p-8 border border-gold/40 shadow-editorial space-y-6 sm:space-y-8">
       {/* 1. Year Selector Tabs */}
-      <div className="flex flex-wrap items-center justify-between pb-6 border-b border-gold/20 gap-4">
-        <div>
+      <div className="flex flex-wrap items-center justify-between pb-5 border-b border-gold/20 gap-4">
+        <div className="min-w-0">
           <div className="inline-flex items-center space-x-2 text-vermilion text-xs font-bold uppercase tracking-wider mb-1">
-            <CalendarIcon className="w-4 h-4 text-gold" />
+            <CalendarIcon className="w-4 h-4 text-gold shrink-0" />
             <span>{dict.calendar.title}</span>
           </div>
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-            {selectedMonth === 0 ? 'All Year' : months.find((m) => m.num === selectedMonth)?.name[locale]} {selectedYear}
+            {selectedMonth === 0 ? calLabels.allYear : months.find((m) => m.num === selectedMonth)?.name[locale]} {selectedYear}
           </h3>
           <p className="text-xs text-charcoal-muted mt-1">{dict.calendar.subtitle}</p>
         </div>
 
-        {/* Year Pills (Current 2026, Upcoming 2027, Historical 2025) */}
-        <div className="flex items-center bg-ivory-light border border-gold/40 rounded-2xl p-1.5 shadow-xs">
+        {/* Year Pills (Current, Upcoming, Historical Archive) */}
+        <div className="flex flex-wrap items-center gap-1.5 w-full lg:w-auto bg-ivory-light border border-gold/40 rounded-2xl p-1.5 shadow-xs">
           <button
+            type="button"
             onClick={() => { setSelectedYear(currentSysYear); setTimeframe('all'); }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+            className={`flex-1 sm:flex-initial min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all inline-flex items-center justify-center gap-1.5 ${
               selectedYear === currentSysYear
                 ? 'bg-vermilion text-ivory-light shadow-sm'
                 : 'text-charcoal hover:bg-gold/15'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-gold" />
-            <span>{currentSysYear} (Current)</span>
+            <Sparkles className="w-3.5 h-3.5 text-gold shrink-0" />
+            <span>{currentSysYear} ({calLabels.currentTag})</span>
           </button>
 
           <button
+            type="button"
             onClick={() => { setSelectedYear(upcomingSysYear); setTimeframe('all'); }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+            className={`flex-1 sm:flex-initial min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all inline-flex items-center justify-center gap-1.5 ${
               selectedYear === upcomingSysYear
                 ? 'bg-vermilion text-ivory-light shadow-sm'
                 : 'text-charcoal hover:bg-gold/15'
             }`}
           >
-            <Clock className="w-3.5 h-3.5 text-gold" />
-            <span>{upcomingSysYear} (Upcoming)</span>
+            <Clock className="w-3.5 h-3.5 text-gold shrink-0" />
+            <span>{upcomingSysYear} ({calLabels.upcomingTag})</span>
           </button>
 
           <button
+            type="button"
             onClick={() => { setSelectedYear(2025); setTimeframe('all'); }}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 ${
+            className={`flex-1 sm:flex-initial min-h-[44px] px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all inline-flex items-center justify-center gap-1.5 ${
               selectedYear === 2025
                 ? 'bg-charcoal text-ivory-light shadow-sm'
                 : 'text-charcoal-muted hover:bg-gold/15'
             }`}
           >
-            <History className="w-3.5 h-3.5" />
-            <span>2025 (Historical Archive)</span>
+            <History className="w-3.5 h-3.5 shrink-0" />
+            <span>2025 ({calLabels.archiveTag})</span>
           </button>
         </div>
 
         {/* View Mode Toggle */}
         <div className="flex items-center bg-ivory-light border border-gold/40 rounded-xl p-1">
           <button
+            type="button"
             onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-lg text-xs font-medium transition-all ${
+            className={`min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-xs font-medium transition-all ${
               viewMode === 'grid' ? 'bg-vermilion text-ivory-light shadow-xs' : 'text-charcoal'
             }`}
             title="Grid View"
+            aria-label="Grid view"
           >
             <Grid className="w-4 h-4" />
           </button>
           <button
+            type="button"
             onClick={() => setViewMode('list')}
-            className={`p-2 rounded-lg text-xs font-medium transition-all ${
+            className={`min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-xs font-medium transition-all ${
               viewMode === 'list' ? 'bg-vermilion text-ivory-light shadow-xs' : 'text-charcoal'
             }`}
             title="List View"
+            aria-label="List view"
           >
             <List className="w-4 h-4" />
           </button>
@@ -238,21 +260,22 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
         <div className="flex flex-wrap items-center gap-2 p-3 bg-ivory-light/80 rounded-2xl border border-gold/30">
           <span className="text-[11px] font-bold text-charcoal-muted uppercase mr-1 flex items-center space-x-1">
             <Flame className="w-3.5 h-3.5 text-vermilion" />
-            <span>Quick Timeframe:</span>
+            <span>{calLabels.timeframeLabel}</span>
           </span>
           {[
-            { id: 'all', label: `All ${currentSysYear} Celebrations` },
-            { id: 'today', label: `🎉 Today's Celebrations` },
-            { id: 'next7', label: `⚡ Next 7 Days` },
-            { id: 'thisMonth', label: `📅 This Month` },
+            { id: 'all', label: calLabels.allFestivals },
+            { id: 'today', label: calLabels.todayFestivals },
+            { id: 'next7', label: calLabels.next7 },
+            { id: 'thisMonth', label: calLabels.thisMonth },
           ].map((tf) => (
             <button
+              type="button"
               key={tf.id}
               onClick={() => {
                 setTimeframe(tf.id as any);
                 if (tf.id !== 'all') setSelectedMonth(0);
               }}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`min-h-[40px] px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                 timeframe === tf.id
                   ? 'bg-vermilion text-ivory-light shadow-xs'
                   : 'bg-ivory hover:bg-gold/20 text-charcoal border border-gold/30'
@@ -295,12 +318,13 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
 
       {/* 4. Community Filter Chips */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-bold text-charcoal-muted uppercase mr-1">Community:</span>
+        <span className="text-xs font-bold text-charcoal-muted uppercase mr-1">{calLabels.communityLabel}</span>
         {communities.map((comm) => (
           <button
+            type="button"
             key={comm}
             onClick={() => setSelectedCommunity(comm)}
-            className={`px-3.5 py-1.5 min-h-[36px] rounded-full text-xs font-medium transition-all ${
+            className={`px-3.5 py-2 min-h-[40px] rounded-full text-xs font-medium transition-all ${
               selectedCommunity === comm
                 ? 'bg-gold text-charcoal font-bold shadow-xs'
                 : 'bg-ivory-light hover:bg-gold/15 text-charcoal border border-gold/30'
@@ -346,13 +370,13 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                 } p-5 transition-all flex flex-col justify-between`}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <span className="bg-gold/20 text-vermilion text-[11px] font-bold px-2.5 py-0.5 rounded-md">
                       {festival.category}
                     </span>
                     {isTodayItem ? (
-                      <span className="bg-vermilion text-ivory-light text-[10px] font-bold px-2 py-0.5 rounded-md animate-pulse">
-                        🎉 Today!
+                      <span className="bg-vermilion text-ivory-light text-[10px] font-bold px-2.5 py-0.5 rounded-md">
+                        {calLabels.todayBadge}
                       </span>
                     ) : (
                       <span className="text-xs font-mono font-bold text-charcoal">
@@ -374,13 +398,15 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                   {/* Verification & Astronomical Notes */}
                   <div className="mt-3 space-y-1.5">
                     {occurrence.regionalObservances[0]?.tithiOrPanchang && (
-                      <div className="bg-ivory-surface p-2 rounded-lg border border-gold/20 text-[11px] text-charcoal-muted">
-                        📅 {occurrence.regionalObservances[0].tithiOrPanchang}
+                      <div className="bg-ivory-surface p-2.5 rounded-lg border border-gold/20 text-[11px] text-charcoal-muted flex items-start gap-1.5">
+                        <CalendarIcon className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                        <span>{occurrence.regionalObservances[0].tithiOrPanchang}</span>
                       </div>
                     )}
                     {occurrence.regionalObservances[0]?.muhuratVerified && (
-                      <div className="bg-gold/10 p-2 rounded-lg border border-gold/30 text-[11px] text-charcoal font-medium">
-                        🪔 {occurrence.regionalObservances[0].muhuratVerified}
+                      <div className="bg-gold/10 p-2.5 rounded-lg border border-gold/30 text-[11px] text-charcoal font-medium flex items-start gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-vermilion shrink-0 mt-0.5" />
+                        <span>{occurrence.regionalObservances[0].muhuratVerified}</span>
                       </div>
                     )}
                   </div>
@@ -408,30 +434,33 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                   </div>
                 </div>
 
-                <div className="pt-5 mt-4 border-t border-gold/20 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-gold/20 flex items-center justify-between gap-2">
                   <Link
                     href={`/${locale}/festivals/${festival.slug}`}
-                    className="text-xs font-bold text-vermilion hover:underline"
+                    className="inline-flex items-center min-h-[44px] text-xs font-bold text-vermilion hover:underline"
                   >
-                    {dict.cards.viewDetails} →
+                    {dict.cards.viewDetails} &rarr;
                   </Link>
 
-                  <div className="flex items-center space-x-1.5">
+                  <div className="flex items-center space-x-2">
                     <a
                       href={getGoogleCalendarUrl({ festival, occurrence })}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 bg-ivory hover:bg-gold/20 border border-gold/40 rounded-lg text-charcoal text-xs font-medium"
+                      className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center bg-ivory hover:bg-gold/20 border border-gold/40 rounded-lg text-charcoal text-xs font-medium"
                       title={`Add ${occurrence.year} observance to Google Calendar`}
+                      aria-label={`Add ${occurrence.year} observance to Google Calendar`}
                     >
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <ExternalLink className="w-4 h-4" />
                     </a>
                     <button
+                      type="button"
                       onClick={() => downloadIcs({ festival, occurrence })}
-                      className="p-1.5 bg-ivory hover:bg-gold/20 border border-gold/40 rounded-lg text-charcoal text-xs font-medium"
+                      className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center bg-ivory hover:bg-gold/20 border border-gold/40 rounded-lg text-charcoal text-xs font-medium"
                       title={`Download ${occurrence.year} .ICS file`}
+                      aria-label={`Download ${occurrence.year} .ICS file`}
                     >
-                      <Download className="w-3.5 h-3.5" />
+                      <Download className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -457,7 +486,7 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                   isTodayItem ? 'border-gold ring-2 ring-gold/50 shadow-md' : 'border-gold/30'
                 } p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4`}
               >
-                <div className="flex items-start space-x-4">
+                <div className="flex items-start space-x-4 min-w-0">
                   <div className={`w-14 h-14 rounded-xl ${isTodayItem ? 'bg-vermilion text-ivory-light' : 'bg-vermilion/10 text-charcoal'} border border-gold/40 flex flex-col items-center justify-center text-center shrink-0`}>
                     <span className={`text-[10px] uppercase font-bold ${isTodayItem ? 'text-ivory-light' : 'text-vermilion'}`}>
                       {dateObj.toLocaleDateString('en-US', { month: 'short' })}
@@ -466,16 +495,16 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                       {dateObj.getDate()}
                     </span>
                   </div>
-                  <div>
-                    <div className="flex items-center space-x-2">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h4 className="font-serif text-lg font-bold text-charcoal hover:text-vermilion transition-colors">
                         <Link href={`/${locale}/festivals/${festival.slug}`}>
                           {festival.title[locale]}
                         </Link>
                       </h4>
                       {isTodayItem && (
-                        <span className="bg-vermilion text-ivory-light text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
-                          🎉 Celebrating Today!
+                        <span className="bg-vermilion text-ivory-light text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                          {calLabels.celebratingTodayBadge}
                         </span>
                       )}
                     </div>
@@ -494,18 +523,19 @@ export function InteractiveFestivalCalendar({ festivals, occurrences, locale }: 
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2 shrink-0">
+                <div className="flex items-center space-x-2 w-full sm:w-auto shrink-0">
                   <a
                     href={getGoogleCalendarUrl({ festival, occurrence })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-1 px-3 py-1.5 rounded-lg border border-gold/40 text-xs font-semibold hover:bg-gold/15"
+                    className="flex-1 sm:flex-initial min-h-[44px] inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-lg border border-gold/40 text-xs font-semibold hover:bg-gold/15"
                   >
                     <span>Google Cal</span>
                   </a>
                   <button
+                    type="button"
                     onClick={() => downloadIcs({ festival, occurrence })}
-                    className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-vermilion text-ivory-light text-xs font-semibold hover:bg-vermilion-600 shadow-xs"
+                    className="flex-1 sm:flex-initial min-h-[44px] inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-lg bg-vermilion text-ivory-light text-xs font-semibold hover:bg-vermilion-600 shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>.ICS</span>

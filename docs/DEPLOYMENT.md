@@ -90,11 +90,11 @@ Rang & Riwaayat is built strictly following **Google Publisher Policies** and **
    - Go to [google.com/adsense](https://www.google.com/adsense/) and submit your site domain (e.g. `rangriwaayat.in`).
 2. **Configure `ads.txt`:**
    - Google requires an `ads.txt` file at the root: `https://yourdomain.com/ads.txt`.
-   - Update `public/ads.txt` with your 16-digit publisher ID:
+   - Set `NEXT_PUBLIC_ADSENSE_PUB_ID=pub-XXXXXXXXXXXXXXXX` (or `NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-XXXXXXXXXXXXXXXX`) in your Vercel or Render Environment Variables.
+   - The dynamic route handler in [`app/ads.txt/route.ts`](../app/ads.txt/route.ts) will automatically serve:
      ```text
      google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
      ```
-   - Alternatively, set the environment variable `NEXT_PUBLIC_ADSENSE_PUB_ID=pub-XXXXXXXXXXXXXXXX`. The dynamic handler in `app/ads.txt/route.ts` will serve it automatically.
 3. **Connect AdSense Script:**
    - In your production environment settings, set:
      ```env

@@ -23,26 +23,36 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
     }
   };
 
+  const shortCode = (code: Locale) => (code === 'hi' ? 'हिं' : code === 'gu' ? 'ગુ' : 'EN');
+
   return (
-    <div className="relative inline-flex items-center bg-ivory-light border border-gold/40 rounded-full p-0.5 shadow-sm">
-      <div className="pl-2.5 pr-1 text-gold flex items-center">
+    <div
+      className="relative inline-flex items-center bg-ivory-light border border-gold/40 rounded-full p-0.5 shadow-sm shrink-0"
+      role="group"
+      aria-label="Language switcher"
+    >
+      <div className="hidden md:flex pl-2.5 pr-1 text-gold items-center" aria-hidden="true">
         <Globe className="w-3.5 h-3.5" />
       </div>
-      <div className="flex space-x-0.5">
+      <div className="flex items-center gap-0.5">
         {LOCALES.map((loc) => {
           const isActive = loc.code === currentLocale;
           return (
             <button
               key={loc.code}
+              type="button"
               onClick={() => handleSwitch(loc.code)}
-              className={`px-2.5 py-1 text-xs font-medium rounded-full transition-all ${
+              aria-pressed={isActive}
+              aria-label={`Switch to ${loc.label}`}
+              className={`min-h-[36px] sm:min-h-[38px] px-2 sm:px-3 py-1 text-[11px] sm:text-xs font-medium rounded-full transition-all whitespace-nowrap ${
                 isActive
                   ? 'bg-vermilion text-ivory-light font-semibold shadow-xs'
                   : 'text-charcoal hover:text-vermilion hover:bg-gold/10'
               }`}
               title={`Switch to ${loc.label}`}
             >
-              {loc.scriptName}
+              <span className="sm:hidden">{shortCode(loc.code)}</span>
+              <span className="hidden sm:inline">{loc.scriptName}</span>
             </button>
           );
         })}

@@ -59,7 +59,7 @@ export function FestivalCountdown({ festival, occurrence, locale }: CountdownPro
   );
 
   return (
-    <div className="bg-gradient-to-br from-vermilion via-vermilion-700 to-vermilion-800 text-ivory-light rounded-2xl p-6 sm:p-8 shadow-editorial-lg border border-gold/40 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-vermilion via-vermilion-700 to-vermilion-800 text-ivory-light rounded-2xl p-5 sm:p-8 shadow-editorial-lg border border-gold/40 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-12 -translate-y-12">
         <DiyaIcon className="w-80 h-80 text-gold" />
@@ -68,10 +68,10 @@ export function FestivalCountdown({ festival, occurrence, locale }: CountdownPro
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 text-center md:text-left">
           {isTodayFest ? (
-            <div className="inline-flex items-center space-x-2 bg-gold text-charcoal px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm animate-pulse">
-              <Sparkles className="w-4 h-4 text-vermilion" />
+            <div className="inline-flex items-center space-x-2 bg-gold text-charcoal px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+              <Sparkles className="w-4 h-4 text-vermilion shrink-0" />
               <span>
-                {locale === 'hi' ? '🎉 आज का पावन पर्व' : locale === 'gu' ? '🎉 આજનો પાવન અવસર' : '🎉 Celebrating Today!'}
+                {locale === 'hi' ? 'आज का पावन पर्व' : locale === 'gu' ? 'આજનો પાવન અવસર' : 'Celebrating Today'}
               </span>
             </div>
           ) : (
@@ -116,7 +116,7 @@ export function FestivalCountdown({ festival, occurrence, locale }: CountdownPro
             </div>
           </div>
         ) : !timeLeft.isPast ? (
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          <div className="grid grid-cols-4 gap-2 sm:gap-3 w-full md:w-auto">
             {[
               { label: locale === 'hi' ? 'दिन' : locale === 'gu' ? 'દિવસ' : 'Days', value: timeLeft.days },
               { label: locale === 'hi' ? 'घंटे' : locale === 'gu' ? 'કલાક' : 'Hours', value: timeLeft.hours },
@@ -125,12 +125,12 @@ export function FestivalCountdown({ festival, occurrence, locale }: CountdownPro
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-charcoal/50 backdrop-blur-sm border border-gold/30 rounded-xl p-2.5 sm:p-3 text-center min-w-[62px] sm:min-w-[72px]"
+                className="bg-charcoal/50 backdrop-blur-sm border border-gold/30 rounded-xl px-1.5 py-2.5 sm:px-3.5 sm:py-3 text-center min-w-0 sm:min-w-[74px]"
               >
-                <div className="font-serif text-2xl sm:text-3xl font-extrabold text-gold leading-none">
+                <div className="font-serif text-xl min-[375px]:text-2xl sm:text-3xl font-extrabold text-gold leading-none tabular-nums">
                   {String(item.value).padStart(2, '0')}
                 </div>
-                <div className="text-[10px] sm:text-xs text-ivory-dark uppercase tracking-wider mt-1 font-sans">
+                <div className="text-[10px] sm:text-xs text-ivory-dark uppercase tracking-wider mt-1 font-sans truncate">
                   {item.label}
                 </div>
               </div>
@@ -138,17 +138,17 @@ export function FestivalCountdown({ festival, occurrence, locale }: CountdownPro
           </div>
         ) : (
           <div className="flex items-center space-x-2 bg-charcoal/40 border border-gold/30 rounded-xl px-4 py-2.5 text-xs text-gold-300">
-            <CheckCircle className="w-4 h-4 text-emerald-400" />
+            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>
               {locale === 'hi' ? 'सम्पन्न अनुष्ठान' : locale === 'gu' ? 'સંપન્ન અનુષ્ઠાન' : `Observed in ${occurrence.year}`}
             </span>
           </div>
         )}
 
-        <div>
+        <div className="w-full md:w-auto">
           <Link
             href={`/${locale}/festivals/${festival.slug}`}
-            className="inline-flex items-center space-x-2 bg-gold hover:bg-gold-300 text-charcoal font-semibold px-5 py-3 rounded-xl shadow-md text-sm transition-all hover:translate-x-0.5 whitespace-nowrap"
+            className="w-full md:w-auto inline-flex items-center justify-center space-x-2 bg-gold hover:bg-gold-300 text-charcoal font-semibold px-5 py-3 min-h-[48px] rounded-xl shadow-md text-sm transition-all hover:translate-x-0.5 whitespace-nowrap"
           >
             <span>{isTodayFest ? (locale === 'hi' ? 'आज की पूजा विधि' : locale === 'gu' ? 'આજની પૂજા વિધિ' : 'View Today\'s Rituals') : dict.cards.viewDetails}</span>
             <ArrowRight className="w-4 h-4" />

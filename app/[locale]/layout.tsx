@@ -3,6 +3,7 @@ import { Locale } from '../../lib/types';
 import { getDictionary } from '../../lib/i18n';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
+import { MobileBottomNav } from '../../components/MobileBottomNav';
 import type { Metadata } from 'next';
 
 export function generateStaticParams() {
@@ -57,10 +58,11 @@ export default function LocaleLayout({
   const loc = (['en', 'hi', 'gu'].includes(params.locale) ? params.locale : 'en') as Locale;
 
   return (
-    <div className="flex flex-col min-h-screen" lang={loc}>
+    <div className="flex flex-col min-h-screen overflow-x-clip" lang={loc}>
       <Header locale={loc} />
       <main className="flex-grow">{children}</main>
       <Footer locale={loc} />
+      <MobileBottomNav locale={loc} />
     </div>
   );
 }

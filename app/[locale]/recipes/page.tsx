@@ -4,7 +4,7 @@ import { getDictionary } from '../../../lib/i18n';
 import { getRecipes } from '../../../lib/db/store';
 import { OrnateBorderHeader } from '../../../components/MotifDecoration';
 import Link from 'next/link';
-import { Utensils, Clock, Users, ChevronRight } from 'lucide-react';
+import { Utensils, Clock, Users, ChevronRight, Leaf } from 'lucide-react';
 
 export const metadata = {
   title: 'Traditional Festive Food & Sacred Prasad',

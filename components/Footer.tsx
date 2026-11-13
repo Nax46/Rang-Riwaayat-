@@ -40,7 +40,7 @@ export function Footer({ locale }: { locale: Locale }) {
       </div>
 
       {/* Main Footer Links */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24 md:pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand info */}
           <div className="lg:col-span-2 space-y-4">
@@ -156,12 +156,17 @@ export function Footer({ locale }: { locale: Locale }) {
                   {dict.footer.advertisingDisclosure}
                 </Link>
               </li>
+              <li className="pt-1 border-t border-charcoal-light/40">
+                <Link href="/admin/login" className="text-charcoal-soft hover:text-gold transition-colors">
+                  {dict.nav.admin}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-charcoal-light mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-charcoal-soft">
+        <div className="border-t border-charcoal-light mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left text-xs text-charcoal-soft">
           <p>{dict.footer.copyright}</p>
           <div className="flex items-center space-x-4 mt-3 sm:mt-0">
             <span className="text-gold/70">Languages: English · हिन्दी · ગુજરાતી</span>

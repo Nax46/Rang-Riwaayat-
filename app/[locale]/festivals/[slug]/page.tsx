@@ -21,10 +21,12 @@ import {
   ChevronRight,
   AlertCircle,
   History,
-  Flame
+  Flame,
+  ScrollText,
 } from 'lucide-react';
 import { DiyaIcon, MandalaIcon, OrnateBorderHeader } from '../../../../components/MotifDecoration';
 import { RRAdSlot } from '../../../../components/RRAdSlot';
+import { SacredChantsPlayer } from '../../../../components/SacredChantsPlayer';
 import type { Metadata } from 'next';
 
 export function generateStaticParams() {
@@ -83,12 +85,140 @@ export default async function FestivalDetailPage({
         loc === 'hi' ? 'hi-IN' : loc === 'gu' ? 'gu-IN' : 'en-IN',
         { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }
       )
-    : 'Annual Observance';
+    : loc === 'hi'
+      ? 'वार्षिक पर्व'
+      : loc === 'gu'
+      ? 'વાર્ષિક પર્વ'
+      : 'Annual Observance';
+
+  const labels = {
+    verifiedPrefix: loc === 'hi' ? 'सत्यापित:' : loc === 'gu' ? 'પ્રમાણિત:' : 'Verified:',
+    astronomicalObs:
+      loc === 'hi'
+        ? 'खगोलीय एवं तिथि विवरण'
+        : loc === 'gu'
+        ? 'ખગોળીય અને તિથિ વિગત'
+        : 'Astronomical & Tithi Observance',
+    celebratingToday:
+      loc === 'hi' ? 'आज का पावन पर्व' : loc === 'gu' ? 'આજનો પાવન અવસર' : 'Celebrating Today',
+    panchangTithi:
+      loc === 'hi' ? 'पंचांग तिथि:' : loc === 'gu' ? 'પંચાંગ તિથિ:' : 'Panchang Tithi:',
+    verifiedMuhurat:
+      loc === 'hi' ? 'प्रमाणित मुहूर्त:' : loc === 'gu' ? 'પ્રમાણિત મુહૂર્ત:' : 'Verified Muhurat:',
+    upcomingIn:
+      loc === 'hi' ? 'आगामी वर्ष' : loc === 'gu' ? 'આગામી વર્ષ' : 'Upcoming in',
+    whyCelebrated:
+      loc === 'hi'
+        ? 'यह पर्व क्यों मनाया जाता है'
+        : loc === 'gu'
+        ? 'આ પર્વ કેમ ઉજવવામાં આવે છે'
+        : 'Why It Is Celebrated',
+    historyTitle:
+      loc === 'hi'
+        ? 'इतिहास और सांस्कृतिक महत्व'
+        : loc === 'gu'
+        ? 'ઇતિહાસ અને સાંસ્કૃતિક મહત્વ'
+        : 'History & Cultural Significance',
+    regionalTitle:
+      loc === 'hi'
+        ? 'क्षेत्रीय परंपराएं और विविधताएं'
+        : loc === 'gu'
+        ? 'પ્રાદેશિક પરંપરાઓ અને વિવિધતા'
+        : 'Regional Traditions & Variations',
+    ritualsTitle:
+      loc === 'hi'
+        ? 'पूजा विधि और पारंपरिक अनुष्ठान'
+        : loc === 'gu'
+        ? 'પૂજા વિધિ અને પરંપરાગત અનુષ્ઠાન'
+        : 'Rituals & Sacred Customs',
+    delicaciesTitle:
+      loc === 'hi'
+        ? 'पारंपरिक उत्सव व्यंजन'
+        : loc === 'gu'
+        ? 'પરંપરાગત ઉત્સવ વાનગીઓ'
+        : 'Associated Festive Delicacies',
+    viewRecipeBtn:
+      loc === 'hi'
+        ? 'पूरी पाक विधि और टाइमर देखें'
+        : loc === 'gu'
+        ? 'સંપૂર્ણ વાનગી અને ટાઇમર જુઓ'
+        : 'View Interactive Recipe & Timers',
+    decorTitle:
+      loc === 'hi'
+        ? 'गृह सज्जा और रंगोली परंपरा'
+        : loc === 'gu'
+        ? 'ગૃહ સજાવટ અને રંગોળી પરંપરા'
+        : 'Traditional Home Decor & Rangoli',
+    faqTitle:
+      loc === 'hi'
+        ? 'प्रायः पूछे जाने वाले प्रश्न'
+        : loc === 'gu'
+        ? 'વારંવાર પૂછાતા પ્રશ્નો'
+        : 'Frequently Asked Questions',
+    sourcesTitle:
+      loc === 'hi'
+        ? 'प्रामाणिक संस्थानिक संदर्भ'
+        : loc === 'gu'
+        ? 'પ્રમાણિત સંસ્થાકીય સંદર્ભો'
+        : 'Verified Primary Institutional Sources',
+    archiveLink:
+      loc === 'hi' ? 'संदर्भ लिंक' : loc === 'gu' ? 'સંદર્ભ લિંક' : 'Archive Link',
+    lastVerified:
+      loc === 'hi' ? 'अंतिम सत्यापन:' : loc === 'gu' ? 'અંતિમ ચકાસણી:' : 'Last verified:',
+    reportNuance:
+      loc === 'hi'
+        ? 'तथ्य या क्षेत्रीय परंपरा साझा करें'
+        : loc === 'gu'
+        ? 'નોંધ કે પ્રાદેશિક વિગત સુચવો'
+        : 'Report Observation / Suggest Nuance',
+    historicalTitle:
+      loc === 'hi'
+        ? 'ऐतिहासिक अभिलेख (2025)'
+        : loc === 'gu'
+        ? 'ઐતિહાસિક અભિલેખ (2025)'
+        : 'Historical Observance Archive (2025)',
+    historicalBodyPrefix:
+      loc === 'hi' ? 'वर्ष 2025 में ' : loc === 'gu' ? 'વર્ષ 2025 માં ' : 'In 2025, ',
+    historicalBodyMid:
+      loc === 'hi' ? ' मनाया गया था: ' : loc === 'gu' ? ' ઉજવાયો હતો: ' : ' was observed on ',
+    historicalBodySuffix:
+      loc === 'hi'
+        ? '। यह अभिलेख सांस्कृतिक और ऐतिहासिक तुलना हेतु सुरक्षित रखा गया है।'
+        : loc === 'gu'
+        ? '. આ નોંધ સાંસ્કૃતિક અને ઐતિહાસિક તુલના માટે જાળવવામાં આવી છે.'
+        : '. This record is maintained for cultural, astrological, and comparative historical documentation.',
+    archivedTithi:
+      loc === 'hi' ? 'अभिलेखित तिथि:' : loc === 'gu' ? 'નોંધાયેલ તિથિ:' : 'Archived Tithi:',
+    sendCardHeading:
+      loc === 'hi'
+        ? `विशेष ${festival.title[loc]} शुभकामना कार्ड भेजें`
+        : loc === 'gu'
+        ? `ખાસ ${festival.title[loc]} શુભેચ્છા કાર્ડ મોકલો`
+        : `Send a Personalized ${festival.title[loc]} Card`,
+    sendCardDesc:
+      loc === 'hi'
+        ? 'बिना किसी ऐप के सीधे अपने ब्राउज़र में मुद्रण योग्य शुभकामना कार्ड तैयार करें।'
+        : loc === 'gu'
+        ? 'કોઈ એપ વગર સીધા બ્રાઉઝરમાં જ સુંદર શુભેચ્છા કાર્ડ બનાવો અને ડાઉનલોડ કરો.'
+        : 'Create and download custom festive greetings instantly directly in your browser.',
+    openStudioBtn:
+      loc === 'hi'
+        ? 'कार्ड स्टूडियो खोलें'
+        : loc === 'gu'
+        ? 'કાર્ડ સ્ટુડિયો ખોલો'
+        : 'Open Celebration Studio',
+    relatedTitle:
+      loc === 'hi'
+        ? 'अन्य प्रमुख पर्व'
+        : loc === 'gu'
+        ? 'અન્ય મુખ્ય તહેવારો'
+        : 'Related Celebrations',
+  };
 
   return (
     <article className="pb-24">
       {/* 1. Hero Image & Title Banner */}
-      <div className="relative h-[420px] sm:h-[500px] w-full bg-charcoal overflow-hidden border-b-4 border-gold">
+      <div className="relative min-h-[360px] sm:min-h-[460px] flex items-end w-full bg-charcoal overflow-hidden border-b-4 border-gold">
         <Image
           src={festival.heroImage.url}
           alt={festival.heroImage.alt}
@@ -97,9 +227,9 @@ export default async function FestivalDetailPage({
           className="object-cover opacity-85"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/55 to-charcoal/15" />
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 absolute bottom-8 left-0 right-0 z-10 text-ivory-light">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pb-12 relative z-10 text-ivory-light">
           <div className="max-w-4xl space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="bg-gold text-charcoal font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
@@ -109,11 +239,11 @@ export default async function FestivalDetailPage({
                 {festival.communities.join(' · ')}
               </span>
               <span className="bg-charcoal/80 text-ivory-dark text-xs px-3 py-1 rounded-full border border-gold/30">
-                Verified: {festival.lastVerifiedDate}
+                {labels.verifiedPrefix} {festival.lastVerifiedDate}
               </span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-black text-ivory-surface tracking-tight">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-black text-ivory-surface tracking-tight leading-[1.14]">
               {festival.title[loc]}
             </h1>
 
@@ -125,25 +255,25 @@ export default async function FestivalDetailPage({
       </div>
 
       {/* Main Content Layout */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
           {/* Left Column: Main Editorial Body */}
-          <div className="lg:col-span-8 space-y-12">
+          <div className="lg:col-span-8 space-y-10 sm:space-y-12">
             {/* Verified Date & Muhurat Card */}
             {occurrence && (
               <div className="space-y-4">
-                <div className={`bg-gradient-to-br from-gold/15 via-ivory-light to-ivory-surface p-6 rounded-3xl border ${
+                <div className={`bg-gradient-to-br from-gold/15 via-ivory-light to-ivory-surface p-5 sm:p-6 rounded-3xl border ${
                   isToday(occurrence.primaryDate) ? 'border-gold ring-2 ring-gold/60 shadow-editorial-lg' : 'border-gold/50 shadow-xs'
                 } space-y-3`}>
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center space-x-2 text-vermilion font-bold text-xs uppercase tracking-wider">
-                      <Calendar className="w-4 h-4 text-gold" />
-                      <span>{occurrence.year} Astronomical & Tithi Observance</span>
+                      <Calendar className="w-4 h-4 text-gold shrink-0" />
+                      <span>{occurrence.year} · {labels.astronomicalObs}</span>
                     </div>
                     {isToday(occurrence.primaryDate) && (
-                      <span className="bg-vermilion text-ivory-light text-xs font-bold px-3 py-1 rounded-full shadow-xs animate-pulse flex items-center space-x-1.5">
-                        <Flame className="w-3.5 h-3.5 text-gold" />
-                        <span>Celebrating Today!</span>
+                      <span className="bg-vermilion text-ivory-light text-xs font-bold px-3 py-1 rounded-full shadow-xs flex items-center space-x-1.5">
+                        <Flame className="w-3.5 h-3.5 text-gold shrink-0" />
+                        <span>{labels.celebratingToday}</span>
                       </span>
                     )}
                   </div>
@@ -151,13 +281,19 @@ export default async function FestivalDetailPage({
                     {primaryDateFormatted}
                   </div>
                   {occurrence.regionalObservances[0]?.tithiOrPanchang && (
-                    <p className="text-xs sm:text-sm text-charcoal-muted font-sans">
-                      📜 <strong>Panchang Tithi:</strong> {occurrence.regionalObservances[0].tithiOrPanchang}
+                    <p className="text-xs sm:text-sm text-charcoal-muted font-sans flex items-start gap-2">
+                      <ScrollText className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                      <span>
+                        <strong>{labels.panchangTithi}</strong> {occurrence.regionalObservances[0].tithiOrPanchang}
+                      </span>
                     </p>
                   )}
                   {occurrence.regionalObservances[0]?.muhuratVerified && (
-                    <p className="text-xs sm:text-sm text-vermilion font-sans font-semibold">
-                      ⏳ <strong>Verified Muhurat:</strong> {occurrence.regionalObservances[0].muhuratVerified}
+                    <p className="text-xs sm:text-sm text-vermilion font-sans font-semibold flex items-start gap-2">
+                      <Clock className="w-4 h-4 text-vermilion shrink-0 mt-0.5" />
+                      <span>
+                        <strong>{labels.verifiedMuhurat}</strong> {occurrence.regionalObservances[0].muhuratVerified}
+                      </span>
                     </p>
                   )}
                 </div>
@@ -165,9 +301,11 @@ export default async function FestivalDetailPage({
                 {/* Upcoming Future Observance Preview (2027) */}
                 {futureOccurrence && (
                   <div className="bg-ivory-surface p-4 rounded-2xl border border-gold/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4 text-gold" />
-                      <span className="text-charcoal-muted font-medium">Upcoming in {futureOccurrence.year}:</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Clock className="w-4 h-4 text-gold shrink-0" />
+                      <span className="text-charcoal-muted font-medium">
+                        {labels.upcomingIn} {futureOccurrence.year}:
+                      </span>
                       <strong className="text-charcoal font-serif text-sm">
                         {new Date(futureOccurrence.primaryDate).toLocaleDateString(
                           loc === 'hi' ? 'hi-IN' : loc === 'gu' ? 'gu-IN' : 'en-IN',
@@ -188,12 +326,12 @@ export default async function FestivalDetailPage({
             {/* Why It Is Celebrated */}
             <section className="space-y-4">
               <div className="flex items-center space-x-2">
-                <DiyaIcon className="w-5 h-5 text-gold" />
+                <DiyaIcon className="w-5 h-5 text-gold shrink-0" />
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                  Why It Is Celebrated
+                  {labels.whyCelebrated}
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-6 rounded-2xl border border-gold/20">
+              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-5 sm:p-6 rounded-2xl border border-gold/20">
                 {festival.whyCelebrated[loc]}
               </p>
             </section>
@@ -201,12 +339,12 @@ export default async function FestivalDetailPage({
             {/* History and Significance */}
             <section className="space-y-4">
               <div className="flex items-center space-x-2">
-                <BookOpen className="w-5 h-5 text-gold" />
+                <BookOpen className="w-5 h-5 text-gold shrink-0" />
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                  History & Cultural Significance
+                  {labels.historyTitle}
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-6 rounded-2xl border border-gold/20">
+              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-5 sm:p-6 rounded-2xl border border-gold/20">
                 {festival.historyAndSignificance[loc]}
               </p>
             </section>
@@ -218,9 +356,9 @@ export default async function FestivalDetailPage({
             {occurrence && occurrence.regionalObservances.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <MapPin className="w-5 h-5 text-gold" />
+                  <MapPin className="w-5 h-5 text-gold shrink-0" />
                   <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                    Regional Traditions & Variations
+                    {labels.regionalTitle}
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -263,23 +401,26 @@ export default async function FestivalDetailPage({
             {/* Rituals and Customs */}
             <section className="space-y-4">
               <div className="flex items-center space-x-2">
-                <Sparkles className="w-5 h-5 text-gold" />
+                <Sparkles className="w-5 h-5 text-gold shrink-0" />
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                  Rituals & Sacred Customs
+                  {labels.ritualsTitle}
                 </h2>
               </div>
-              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-6 rounded-2xl border border-gold/20">
+              <p className="text-sm sm:text-base text-charcoal leading-relaxed whitespace-pre-line bg-ivory-surface p-5 sm:p-6 rounded-2xl border border-gold/20">
                 {festival.ritualsAndCustoms[loc]}
               </p>
             </section>
+
+            {/* Sacred Chant, Mantra & Folk Text Player */}
+            <SacredChantsPlayer festivalSlug={festival.slug} locale={loc} />
 
             {/* Traditional Food & Festive Recipes */}
             {relatedRecipes.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <Utensils className="w-5 h-5 text-gold" />
+                  <Utensils className="w-5 h-5 text-gold shrink-0" />
                   <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                    Associated Festive Delicacies
+                    {labels.delicaciesTitle}
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -296,9 +437,9 @@ export default async function FestivalDetailPage({
                       </p>
                       <Link
                         href={`/${loc}/recipes/${rec.slug}`}
-                        className="inline-flex items-center space-x-1 text-xs font-bold text-vermilion hover:underline pt-2"
+                        className="inline-flex items-center space-x-1 min-h-[44px] text-xs font-bold text-vermilion hover:underline pt-1"
                       >
-                        <span>View Interactive Recipe & Timers</span>
+                        <span>{labels.viewRecipeBtn}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -311,9 +452,9 @@ export default async function FestivalDetailPage({
             {festival.decorationIdeas[loc] && festival.decorationIdeas[loc].length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <Palette className="w-5 h-5 text-gold" />
+                  <Palette className="w-5 h-5 text-gold shrink-0" />
                   <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                    Auspicious Home Decor & Rangoli Ideas
+                    {labels.decorTitle}
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -322,7 +463,7 @@ export default async function FestivalDetailPage({
                       key={idx}
                       className="bg-ivory-light p-4 rounded-xl border border-gold/30 text-xs sm:text-sm text-charcoal flex items-start space-x-2.5"
                     >
-                      <span className="text-gold font-bold">✦</span>
+                      <span className="text-gold font-bold" aria-hidden="true">*</span>
                       <span>{idea}</span>
                     </div>
                   ))}
@@ -334,9 +475,9 @@ export default async function FestivalDetailPage({
             {festival.faqs && festival.faqs.length > 0 && (
               <section className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <HelpCircle className="w-5 h-5 text-gold" />
+                  <HelpCircle className="w-5 h-5 text-gold shrink-0" />
                   <h2 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
-                    Frequently Asked Questions
+                    {labels.faqTitle}
                   </h2>
                 </div>
                 <div className="space-y-3">
@@ -358,10 +499,10 @@ export default async function FestivalDetailPage({
             )}
 
             {/* Primary Sources & References */}
-            <section className="bg-ivory-light p-6 rounded-3xl border border-gold/40 space-y-3">
+            <section className="bg-ivory-light p-5 sm:p-6 rounded-3xl border border-gold/40 space-y-3">
               <div className="flex items-center space-x-2 text-charcoal font-bold text-xs uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 text-gold" />
-                <span>Verified Primary Institutional Sources</span>
+                <ShieldCheck className="w-4 h-4 text-gold shrink-0" />
+                <span>{labels.sourcesTitle}</span>
               </div>
               <ul className="text-xs text-charcoal-muted space-y-2">
                 {festival.sources.map((src) => (
@@ -374,44 +515,46 @@ export default async function FestivalDetailPage({
                         rel="noopener noreferrer"
                         className="inline-flex items-center space-x-1 text-vermilion ml-2 hover:underline"
                       >
-                        <span>Archive Link</span>
+                        <span>{labels.archiveLink}</span>
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                   </li>
                 ))}
               </ul>
-              <div className="pt-2 text-[11px] text-charcoal-soft flex items-center justify-between">
-                <span>Last verified date: {festival.lastVerifiedDate}</span>
+              <div className="pt-2 text-[11px] text-charcoal-soft flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <span>{labels.lastVerified} {festival.lastVerifiedDate}</span>
                 <Link
                   href={`/${loc}/corrections`}
-                  className="text-vermilion hover:underline font-semibold"
+                  className="text-vermilion hover:underline font-semibold inline-flex items-center min-h-[36px]"
                 >
-                  Report Observation / Suggest Nuance →
+                  {labels.reportNuance} &rarr;
                 </Link>
               </div>
             </section>
 
             {/* Historical Observance Archive (2025) */}
             {historicalOccurrence && (
-              <section className="bg-charcoal/5 p-6 rounded-3xl border border-charcoal/20 space-y-3">
+              <section className="bg-charcoal/5 p-5 sm:p-6 rounded-3xl border border-charcoal/20 space-y-3">
                 <div className="flex items-center space-x-2 text-charcoal font-bold text-xs uppercase tracking-wider">
-                  <History className="w-4 h-4 text-gold" />
-                  <span>Historical Observance Archive (2025)</span>
+                  <History className="w-4 h-4 text-gold shrink-0" />
+                  <span>{labels.historicalTitle}</span>
                 </div>
                 <p className="text-xs text-charcoal-muted leading-relaxed">
-                  In 2025, {festival.title[loc]} was observed on{' '}
+                  {labels.historicalBodyPrefix}
+                  {festival.title[loc]}
+                  {labels.historicalBodyMid}
                   <strong className="text-charcoal font-semibold">
                     {new Date(historicalOccurrence.primaryDate).toLocaleDateString(
                       loc === 'hi' ? 'hi-IN' : loc === 'gu' ? 'gu-IN' : 'en-IN',
                       { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }
                     )}
                   </strong>
-                  . This record is maintained for cultural, astrological, and comparative historical documentation.
+                  {labels.historicalBodySuffix}
                 </p>
                 {historicalOccurrence.regionalObservances[0]?.tithiOrPanchang && (
                   <div className="text-[11px] font-mono text-charcoal-soft bg-ivory-surface p-2 rounded-lg border border-gold/20">
-                    Archived Tithi: {historicalOccurrence.regionalObservances[0].tithiOrPanchang}
+                    {labels.archivedTithi} {historicalOccurrence.regionalObservances[0].tithiOrPanchang}
                   </div>
                 )}
               </section>
@@ -424,23 +567,23 @@ export default async function FestivalDetailPage({
             <div className="bg-gradient-to-br from-vermilion to-vermilion-800 text-ivory-light p-6 rounded-3xl border border-gold shadow-editorial space-y-4 text-center">
               <DiyaIcon className="w-10 h-10 text-gold mx-auto" />
               <h3 className="font-serif text-xl font-bold">
-                Send a Personalized {festival.title[loc]} Card
+                {labels.sendCardHeading}
               </h3>
               <p className="text-xs text-ivory-dark">
-                Create and download custom festive greetings instantly with no app download required.
+                {labels.sendCardDesc}
               </p>
               <Link
                 href={`/${loc}/studio?festival=${festival.slug}`}
-                className="inline-block w-full bg-gold hover:bg-gold-300 text-charcoal font-bold py-3 rounded-xl shadow-md text-xs transition-all"
+                className="inline-flex items-center justify-center w-full min-h-[48px] bg-gold hover:bg-gold-300 text-charcoal font-bold py-3 rounded-xl shadow-md text-xs transition-all"
               >
-                Open Celebration Studio →
+                {labels.openStudioBtn} &rarr;
               </Link>
             </div>
 
             {/* Sidebar Related Celebrations */}
             <div className="bg-ivory-surface p-6 rounded-3xl border border-gold/40 shadow-xs space-y-4">
               <h4 className="font-serif text-base font-bold text-charcoal uppercase tracking-wider">
-                Related Celebrations
+                {labels.relatedTitle}
               </h4>
               <div className="space-y-3">
                 {relatedFestivals.map((rel) => (

@@ -54,21 +54,77 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
     'Cultural & Folk',
   ];
 
+  const monthNames =
+    locale === 'hi'
+      ? [
+          'सभी महीने',
+          'जनवरी',
+          'फ़रवरी',
+          'मार्च',
+          'अप्रैल',
+          'मई',
+          'जून',
+          'जुलाई',
+          'अगस्त',
+          'सितंबर',
+          'अक्टूबर',
+          'नवंबर',
+          'दिसंबर',
+        ]
+      : locale === 'gu'
+      ? [
+          'બધા મહિના',
+          'જાન્યુઆરી',
+          'ફેબ્રુઆરી',
+          'માર્ચ',
+          'એપ્રિલ',
+          'મે',
+          'જૂન',
+          'જુલાઈ',
+          'ઑગસ્ટ',
+          'સપ્ટેમ્બર',
+          'ઑક્ટોબર',
+          'નવેમ્બર',
+          'ડિસેમ્બર',
+        ]
+      : [
+          'All Months',
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
+
   const months = [
-    { num: 'All', label: 'All Months' },
-    { num: '1', label: 'January' },
-    { num: '2', label: 'February' },
-    { num: '3', label: 'March' },
-    { num: '4', label: 'April' },
-    { num: '5', label: 'May' },
-    { num: '6', label: 'June' },
-    { num: '7', label: 'July' },
-    { num: '8', label: 'August' },
-    { num: '9', label: 'September' },
-    { num: '10', label: 'October' },
-    { num: '11', label: 'November' },
-    { num: '12', label: 'December' },
+    { num: 'All', label: monthNames[0] },
+    ...Array.from({ length: 12 }, (_, idx) => ({
+      num: String(idx + 1),
+      label: monthNames[idx + 1],
+    })),
   ];
+
+  const uiLabels = {
+    month: locale === 'hi' ? 'माह' : locale === 'gu' ? 'મહિનો' : 'Month',
+    community: locale === 'hi' ? 'समुदाय / परंपरा' : locale === 'gu' ? 'પરંપરા / સમુદાય' : 'Community',
+    category: locale === 'hi' ? 'श्रेणी' : locale === 'gu' ? 'શ્રેણી' : 'Category',
+    sortBy: locale === 'hi' ? 'क्रमबद्ध करें' : locale === 'gu' ? 'ક્રમ' : 'Sort By',
+    sortDate: locale === 'hi' ? 'तिथि अनुसार' : locale === 'gu' ? 'તારીખ મુજબ' : 'Observance Date',
+    sortName: locale === 'hi' ? 'वर्णमाला अनुसार' : locale === 'gu' ? 'કક્કાવારી મુજબ' : 'Alphabetical (A-Z)',
+    showingPrefix: locale === 'hi' ? 'कुल' : locale === 'gu' ? 'કુલ' : 'Showing',
+    showingSuffix: locale === 'hi' ? 'पर्व प्रदर्शित' : locale === 'gu' ? 'તહેવારો' : 'festivals',
+    verifiedFallback:
+      locale === 'hi' ? 'सत्यापित तिथि' : locale === 'gu' ? 'પ્રમાણિત તિથિ' : 'Verified Observance',
+    allIndia: locale === 'hi' ? 'संपूर्ण भारत' : locale === 'gu' ? 'સમગ્ર ભારત' : 'All India',
+    resetLabel: locale === 'hi' ? 'रीसेट' : locale === 'gu' ? 'રીસેટ' : 'Reset',
+  };
 
   const filteredFestivals = useMemo(() => {
     return initialFestivals.filter((fest) => {
@@ -87,7 +143,10 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
           fest.title.en.toLowerCase().includes(q) ||
           fest.title.hi.toLowerCase().includes(q) ||
           fest.title.gu.toLowerCase().includes(q);
-        const matchesSummary = fest.shortSummary.en.toLowerCase().includes(q);
+        const matchesSummary =
+          fest.shortSummary.en.toLowerCase().includes(q) ||
+          fest.shortSummary.hi.toLowerCase().includes(q) ||
+          fest.shortSummary.gu.toLowerCase().includes(q);
         if (!matchesTitle && !matchesSummary) return false;
       }
       // Month filter
@@ -120,7 +179,7 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
   return (
     <div className="space-y-8">
       {/* Search and Filters Bar */}
-      <div className="bg-ivory-surface p-6 rounded-3xl border border-gold/40 shadow-editorial space-y-4">
+      <div className="bg-ivory-surface p-5 sm:p-6 rounded-3xl border border-gold/40 shadow-editorial space-y-4">
         {/* Search Input */}
         <div className="relative">
           <Search className="w-5 h-5 text-gold absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -129,21 +188,22 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={dict.filters.searchPlaceholder}
-            className="w-full pl-12 pr-4 py-3.5 bg-ivory-light border border-gold/40 rounded-2xl text-sm text-charcoal focus:outline-hidden focus:ring-2 focus:ring-vermilion"
+            aria-label={dict.filters.searchPlaceholder}
+            className="w-full min-h-[48px] pl-12 pr-4 py-3 bg-ivory-light border border-gold/40 rounded-2xl text-sm text-charcoal focus:outline-none focus:ring-2 focus:ring-vermilion"
           />
         </div>
 
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
           {/* Month */}
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal-muted mb-1">
-              Month
+              {uiLabels.month}
             </label>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full p-2.5 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-hidden"
+              className="w-full min-h-[44px] px-3 py-2 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-none"
             >
               {months.map((m) => (
                 <option key={m.num} value={m.num}>
@@ -156,12 +216,12 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
           {/* Community */}
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal-muted mb-1">
-              Community
+              {uiLabels.community}
             </label>
             <select
               value={selectedCommunity}
               onChange={(e) => setSelectedCommunity(e.target.value)}
-              className="w-full p-2.5 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-hidden"
+              className="w-full min-h-[44px] px-3 py-2 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-none"
             >
               {communities.map((c) => (
                 <option key={c} value={c}>
@@ -174,12 +234,12 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
           {/* Category */}
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal-muted mb-1">
-              Category
+              {uiLabels.category}
             </label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full p-2.5 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-hidden"
+              className="w-full min-h-[44px] px-3 py-2 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-none"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -192,46 +252,52 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
           {/* Sort By */}
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal-muted mb-1">
-              Sort By
+              {uiLabels.sortBy}
             </label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="w-full p-2.5 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-hidden"
+              className="w-full min-h-[44px] px-3 py-2 text-xs bg-ivory-light border border-gold/40 rounded-xl focus:outline-none"
             >
-              <option value="date">Observance Date</option>
-              <option value="name">Alphabetical (A-Z)</option>
+              <option value="date">{uiLabels.sortDate}</option>
+              <option value="name">{uiLabels.sortName}</option>
             </select>
           </div>
 
           {/* View Mode & Reset */}
-          <div className="flex items-end space-x-2">
+          <div className="flex items-end gap-2">
             <div className="flex bg-ivory-light border border-gold/40 rounded-xl p-0.5">
               <button
+                type="button"
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg text-xs ${
+                className={`min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-xs ${
                   viewMode === 'grid' ? 'bg-vermilion text-ivory-light' : 'text-charcoal'
                 }`}
                 title="Grid"
+                aria-label="Grid view"
               >
                 <Grid className="w-4 h-4" />
               </button>
               <button
+                type="button"
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg text-xs ${
+                className={`min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-xs ${
                   viewMode === 'list' ? 'bg-vermilion text-ivory-light' : 'text-charcoal'
                 }`}
                 title="List"
+                aria-label="List view"
               >
                 <List className="w-4 h-4" />
               </button>
             </div>
             <button
+              type="button"
               onClick={resetFilters}
-              className="p-2.5 bg-ivory-light hover:bg-gold/15 border border-gold/40 rounded-xl text-charcoal text-xs font-semibold flex items-center justify-center space-x-1"
-              title="Reset Filters"
+              className="flex-1 min-h-[44px] px-3 bg-ivory-light hover:bg-gold/15 border border-gold/40 rounded-xl text-charcoal text-xs font-semibold inline-flex items-center justify-center gap-1.5"
+              title={uiLabels.resetLabel}
             >
               <RotateCcw className="w-3.5 h-3.5" />
+              <span>{uiLabels.resetLabel}</span>
             </button>
           </div>
         </div>
@@ -240,7 +306,9 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
       {/* Results Count */}
       <div className="flex items-center justify-between text-xs text-charcoal-muted px-2">
         <span>
-          Showing <strong className="text-vermilion">{filteredFestivals.length}</strong> festivals
+          {uiLabels.showingPrefix}{' '}
+          <strong className="text-vermilion">{filteredFestivals.length}</strong>{' '}
+          {uiLabels.showingSuffix}
         </span>
       </div>
 
@@ -255,14 +323,15 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
             {dict.cards.emptyFestivalsSubtitle}
           </p>
           <button
+            type="button"
             onClick={resetFilters}
-            className="mt-4 px-5 py-2.5 bg-vermilion text-ivory-light text-xs font-bold rounded-xl"
+            className="mt-4 min-h-[44px] px-5 py-2.5 bg-vermilion text-ivory-light text-xs font-bold rounded-xl"
           >
             {dict.filters.clearFilters}
           </button>
         </div>
       ) : viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredFestivals.map((fest) => {
             const occ = occurrences.find((o) => o.festivalSlug === fest.slug);
             const dateFormatted = occ
@@ -270,7 +339,7 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
                   locale === 'hi' ? 'hi-IN' : locale === 'gu' ? 'gu-IN' : 'en-IN',
                   { month: 'short', day: 'numeric', year: 'numeric' }
                 )
-              : 'Verified Observance';
+              : uiLabels.verifiedFallback;
 
             return (
               <article
@@ -286,39 +355,40 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-ivory-light">
-                    <span className="bg-gold text-charcoal font-bold px-2 py-0.5 rounded-md">
+                  <div className="absolute bottom-3 left-4 right-4 flex flex-wrap items-center justify-between gap-2 text-xs text-ivory-light">
+                    <span className="bg-gold text-charcoal font-bold px-2.5 py-1 rounded-md">
                       {fest.category}
                     </span>
-                    <span className="font-mono bg-charcoal/70 px-2 py-0.5 rounded-md border border-gold/30">
-                      📅 {dateFormatted}
+                    <span className="font-medium bg-charcoal/80 px-2.5 py-1 rounded-md border border-gold/30 inline-flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-gold shrink-0" />
+                      <span>{dateFormatted}</span>
                     </span>
                   </div>
                 </div>
 
-                <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
+                <div className="p-5 sm:p-6 flex-grow flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="font-serif text-2xl font-bold text-charcoal group-hover:text-vermilion transition-colors">
+                    <h3 className="font-serif text-xl sm:text-2xl font-bold text-charcoal group-hover:text-vermilion transition-colors">
                       <Link href={`/${locale}/festivals/${fest.slug}`}>
                         {fest.title[locale]}
                       </Link>
                     </h3>
-                    <p className="text-xs text-charcoal-muted mt-2 line-clamp-3 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-charcoal-muted mt-2 line-clamp-3 leading-relaxed">
                       {fest.shortSummary[locale]}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-gold/20 flex items-center justify-between">
+                  <div className="pt-3 border-t border-gold/20 flex items-center justify-between">
                     <Link
                       href={`/${locale}/festivals/${fest.slug}`}
-                      className="text-xs font-bold text-vermilion hover:underline flex items-center space-x-1"
+                      className="min-h-[44px] text-xs font-bold text-vermilion hover:underline inline-flex items-center space-x-1"
                     >
                       <span>{dict.cards.viewDetails}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <ChevronRight className="w-4 h-4" />
                     </Link>
 
                     <span className="text-[11px] text-charcoal-soft">
-                      {fest.statesCovered[0] || 'All India'}
+                      {fest.statesCovered[0] || uiLabels.allIndia}
                     </span>
                   </div>
                 </div>
@@ -336,7 +406,7 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
                   locale === 'hi' ? 'hi-IN' : locale === 'gu' ? 'gu-IN' : 'en-IN',
                   { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }
                 )
-              : 'Verified Observance';
+              : uiLabels.verifiedFallback;
 
             return (
               <article
@@ -354,11 +424,11 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
                     />
                   </div>
                   <div>
-                    <div className="flex items-center space-x-2 mb-1">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
                       <span className="text-[10px] bg-gold/20 text-vermilion font-bold px-2 py-0.5 rounded-md">
                         {fest.category}
                       </span>
-                      <span className="text-[11px] text-charcoal-muted font-mono">{dateFormatted}</span>
+                      <span className="text-[11px] text-charcoal-muted font-medium">{dateFormatted}</span>
                     </div>
                     <h3 className="font-serif text-lg font-bold text-charcoal hover:text-vermilion transition-colors">
                       <Link href={`/${locale}/festivals/${fest.slug}`}>
@@ -373,9 +443,9 @@ export function FestivalDirectoryClient({ initialFestivals, occurrences, locale 
 
                 <Link
                   href={`/${locale}/festivals/${fest.slug}`}
-                  className="bg-ivory-light hover:bg-gold/20 text-vermilion border border-gold/40 text-xs font-bold px-4 py-2.5 rounded-xl shrink-0 transition-colors"
+                  className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center bg-ivory-light hover:bg-gold/20 text-vermilion border border-gold/40 text-xs font-bold px-4 py-2.5 rounded-xl shrink-0 transition-colors"
                 >
-                  {dict.cards.viewDetails} →
+                  {dict.cards.viewDetails} &rarr;
                 </Link>
               </article>
             );
